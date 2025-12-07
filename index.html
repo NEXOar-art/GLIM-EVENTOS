@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLIM EVENTOS | Experiencia Inmersiva</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* --- CORE VARIABLES (THEME ENGINE) --- */
+        :root {
+            /* Modo Clásico (Silent Luxury) */
+            --bg-color: #f0f2f5;
+            --text-color: #2c3e50;
+            --accent-color: #c5a059; /* Gold */
+            --accent-hover: #b08d45;
+            --secondary-bg: #ffffff;
+            --card-bg: #ffffff;
+            --font-main: 'Montserrat', sans-serif;
+            --font-display: 'Playfair Display', serif;
+            --shadow: 0 15px 35px rgba(0,0,0,0.08);
+            --border-radius: 8px;
+            --btn-gradient: linear-gradient(135deg, #c5a059 0%, #d4af37 100%);
+            --glow: none;
+            --input-bg: #f8f9fa;
+            --grid-opacity: 0;
+            --parallax-opacity: 0.05;
+        }
+
+        /* Modo Fiesta (Retrosynth / Cyberpunk) */
+        body.party-mode {
+            --bg-color: #0b0c15;
+            --text-color: #e0e0e0;
+            --accent-color: #00f3ff; /* Cyan Neon */
+            --accent-hover: #00c2cc;
+            --secondary-bg: #151625;
+            --card-bg: #1a1b2e;
+            --font-main: 'Montserrat', sans-serif;
+            --font-display: 'Orbitron', sans-serif;
+            --shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+            --border-radius: 16px;
+            --btn-gradient: linear-gradient(90deg, #ff00ff, #00f3ff);
+            --glow: 0 0 15px var(--accent-color);
+            --input-bg: #23243a;
+            --grid-opacity: 0.3;
+            --parallax-opacity: 0.1;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * { box-sizing: border-box; transition: background 0.4s ease, color 0.4s ease, border 0.4s ease; }
+        
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 15px 0; }
+
+        /* --- PARALLAX BACKGROUND --- */
+        .parallax-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 120vh;
+            z-index: -1;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* Textura sutil */
+            opacity: var(--parallax-opacity);
+            transform: translateZ(-1px) scale(2);
+            pointer-events: none;
+        }
+
+        .retro-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background-image: 
+                linear-gradient(var(--accent-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--accent-color) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center bottom;
+            opacity: var(--grid-opacity);
+            transform: perspective(500px) rotateX(60deg) translateY(100px) scale(2);
+            z-index: -2;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(var(--bg-color), 0.8);
+            z-index: 100;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text-color); }
+        
+        /* Switch CSS */
+        .switch-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .toggle-btn { width: 50px; height: 26px; background: #ccc; border-radius: 50px; position: relative; }
+        .toggle-btn::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; }
+        body.party-mode .toggle-btn { background: #ff00ff; }
+        body.party-mode .toggle-btn::after { transform: translateX(24px); background: #00f3ff; }
+
+        /* --- HERO & STORYTELLING --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 40px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 20px;
+            text-shadow: var(--glow);
+            transition: transform 0.1s; /* Para efecto parallax JS */
+        }
+
+        .storytelling-box {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* --- SWIPER CAROUSEL --- */
+        .swiper-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+        .swiper {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .swiper-slide::before {
+            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+        }
+        .swiper-slide span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        /* --- FORMULARIO PROGRESIVO AVANZADO --- */
+        .form-wrapper {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 650px; /* Más ancho para las explicaciones */
+            position: relative;
+            border-top: 4px solid var(--accent-color);
+            margin-bottom: 80px;
+        }
+
+        .step { display: none; animation: slideUp 0.5s ease; }
+        .step.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-color); }
+        
+        input, select {
+            width: 100%; padding: 14px; border: 2px solid transparent; 
+            border-radius: var(--border-radius); background: var(--input-bg);
+            color: var(--text-color); font-size: 1rem; outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            border-bottom: 2px solid rgba(128,128,128,0.2);
+        }
+        input:focus { border-color: var(--accent-color); background: var(--card-bg); }
+
+        /* Vibe Selector Cards */
+        .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
+        .vibe-option {
+            border: 1px solid rgba(128,128,128,0.2);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: var(--input-bg);
+            text-align: left;
+        }
+        .vibe-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(197, 160, 89, 0.1); /* Gold tint default */
+        }
+        body.party-mode .vibe-option.selected { background: rgba(0, 243, 255, 0.1); }
+        
+        .vibe-header { font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .vibe-details { 
+            display: none; 
+            margin-top: 10px; 
+            font-size: 0.85rem; 
+            color: var(--text-color); 
+            opacity: 0.8; 
+            border-top: 1px solid rgba(128,128,128,0.2);
+            padding-top: 10px;
+        }
+        .vibe-option.active .vibe-details { display: block; }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
+        .btn {
+            flex: 1; padding: 15px; border: none; border-radius: var(--border-radius);
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+        }
+        .btn-primary { background: var(--btn-gradient); color: white; }
+        .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Progress Dots */
+        .progress-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
+        .dot { width: 10px; height: 10px; background: rgba(128,128,128,0.3); border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: var(--accent-color); transform: scale(1.3); }
+
+        /* --- DATA SECTION --- */
+        .data-section { padding: 80px 20px; background: var(--card-bg); position: relative; z-index: 1;}
+        .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
+        .intro-data { max-width: 800px; margin: 0 auto 40px; text-align: center; }
+        .kpi-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; max-width: 1000px; margin: 40px auto 0;
+        }
+        .kpi-card {
+            padding: 20px; border-radius: var(--border-radius);
+            background: var(--input-bg); border-left: 3px solid var(--accent-color);
+        }
+
+        /* Scrollbar custom */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="parallax-wrapper"></div>
+    <div class="retro-grid"></div>
+
+    <header>
+        <div class="logo">GLIM EVENTOS</div>
+        <div class="switch-container" id="themeSwitch">
+            <span id="modeLabel">CLÁSICO</span>
+            <div class="toggle-btn"></div>
+        </div>
+    </header>
+
+    <section class="hero" id="heroSection">
+        <h1 id="heroTitle">Silent Luxury & Elegance</h1>
+        
+        <div class="storytelling-box">
+            <p id="heroSubtitle">
+                Diseñamos universos donde la realidad se suspende. 
+                Ya sea la elegancia atemporal de una boda clásica o la energía eléctrica de una fiesta neón, 
+                cada detalle es una obra de ingeniería emocional.
+            </p>
+        </div>
+
+        <div class="swiper-section">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519225448526-0ca85c935661?q=80&w=2000');">
+                        <span>Clásico & Eterno</span>
+                    </div>
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=2000');">
+                        <span>Fiesta Neón</span>
+                    </div>
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000');">
+                        <span>Bodas Vintage</span>
+                    </div>
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000');">
+                        <span>Glamour Luxury</span>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+
+        <div class="form-wrapper">
+            <div class="progress-dots">
+                <div class="dot active" id="dot1"></div>
+                <div class="dot" id="dot2"></div>
+                <div class="dot" id="dot3"></div>
+            </div>
+
+            <form id="glimForm">
+                
+                <div class="step active" id="step1">
+                    <h3>01. Identidad Digital</h3>
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular / WhatsApp</label>
+                        <input type="tel" id="phone" placeholder="+54 9 ..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email (Opcional)</label>
+                        <input type="email" id="email" placeholder="contacto@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa (Solo Corporativo)</label>
+                        <input type="text" id="company" placeholder="Nombre de la empresa">
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Continuar <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="step" id="step2">
+                    <h3>02. Arquitectura del Evento</h3>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Evento</label>
+                        <select id="eventType" onchange="updateChartHighlight()">
+                            <option value="boda">💍 Boda / Compromiso</option>
+                            <option value="15">👑 Cumpleaños de 15</option>
+                            <option value="corporativo">💼 Evento Empresarial</option>
+                            <option value="familia">🏡 Evento Familiar</option>
+                            <option value="social">🎉 Evento Social / Fiesta</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Estilo de Decoración (Selecciona uno)</label>
+                        <div class="vibe-grid" id="vibeContainer">
+                            </div>
+                        <input type="hidden" id="selectedVibe" value="">
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep(1)">Atrás</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(3)">Siguiente <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="step" id="step3">
+                    <h3>03. Coordenadas Temporales</h3>
+                    <div class="form-group">
+                        <label>Fecha Deseada</label>
+                        <input type="date" id="date">
+                        <small style="color:var(--accent-color); margin-top:5px; display:block;"><i class="fas fa-calendar-check"></i> Verificando disponibilidad en tiempo real...</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad de Invitados</label>
+                        <input type="number" id="guests" placeholder="100">
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Atrás</button>
+                        <button type="button" class="btn btn-primary" onclick="sendWhatsApp()">🚀 Finalizar Experiencia</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+    <section class="data-section">
+        <div class="intro-data">
+            <h2>📊 Inteligencia de Eventos</h2>
+            <p>Comparamos tu tipo de evento con nuestra base de datos histórica para prever necesidades emocionales y logísticas.</p>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="sentimentChart"></canvas>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h4><i class="fas fa-heartbeat"></i> Intensidad</h4>
+                <p>Nivel de carga emocional esperada en los anfitriones e invitados.</p>
+            </div>
+            <div class="kpi-card">
+                <h4><i class="fas fa-tasks"></i> Logística</h4>
+                <p>Complejidad de organización y coordinación de proveedores.</p>
+            </div>
+            <div class="kpi-card">
+                <h4><i class="fas fa-user-tie"></i> Protocolo</h4>
+                <p>Grado de formalidad y estructura requerida.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* --- 1. INITIALIZATION & SWIPER --- */
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: { delay: 3500, disableOnInteraction: false },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            loop: true
+        });
+
+        /* --- 2. VIBE DATA & RENDERER --- */
+        const vibes = [
+            { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros (blanco, dorado), flores naturales, velas, mantelería fina. Ideal para bodas de gala.' },
+            { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel (rosa, lavanda), iluminación cálida, rosas y peonías. Perfecto para bodas íntimas.' },
+            { id: 'vintage', title: '3. Vintage', desc: 'Elementos antiguos, maletas, encajes, madera desgastada. Popular en Bodas y XV.' },
+            { id: 'rustico', title: '4. Rústico / Campestre', desc: 'Madera, yute, mason jars, flores silvestres. Ideal para aire libre o quintas.' },
+            { id: 'moderno', title: '5. Moderno / Minimalista', desc: 'Líneas limpias, monocromático, vidrio, metal. Estructuras geométricas. Bodas urbanas.' },
+            { id: 'tematico', title: '6. Temático', desc: 'Basado en idea central (Playa, Cine, Boho). Decoración 100% personalizada.' },
+            { id: 'glamour', title: '7. Glamour / Luxury', desc: 'Brillos, espejos, chandeliers. Paleta dorada/negra. Eventos de alta distinción.' }
+        ];
+
+        const vibeContainer = document.getElementById('vibeContainer');
+        
+        vibes.forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'vibe-option';
+            div.innerHTML = `
+                <div class="vibe-header">
+                    <span>${v.title}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="vibe-details">${v.desc}</div>
+            `;
+            div.onclick = () => selectVibe(v.id, div);
+            vibeContainer.appendChild(div);
+        });
+
+        function selectVibe(id, element) {
+            document.querySelectorAll('.vibe-option').forEach(el => {
+                el.classList.remove('selected', 'active');
+            });
+            element.classList.add('selected', 'active');
+            document.getElementById('selectedVibe').value = vibes.find(v => v.id === id).title;
+        }
+
+        /* --- 3. THEME ENGINE & PARALLAX --- */
+        const themeSwitch = document.getElementById('themeSwitch');
+        const body = document.body;
+        const heroTitle = document.getElementById('heroTitle');
+
+        // Simple Parallax Effect on Title
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            heroTitle.style.transform = `translateY(${scrolled * 0.4}px)`;
+        });
+
+        themeSwitch.addEventListener('click', () => {
+            body.classList.toggle('party-mode');
+            const isParty = body.classList.contains('party-mode');
+            
+            document.getElementById('modeLabel').textContent = isParty ? 'MODO FIESTA' : 'MODO CLÁSICO';
+            heroTitle.textContent = isParty ? 'NEON NIGHTS & RETROSYNTH' : 'Silent Luxury & Elegance';
+            updateChartTheme(isParty);
+        });
+
+        /* --- 4. FORM NAVIGATION --- */
+        function nextStep(step) {
+            // Validation simple
+            if(step === 2) {
+                if(!document.getElementById('name').value || !document.getElementById('phone').value) 
+                    return alert("Por favor completa nombre y teléfono.");
+            }
+            if(step === 3 && document.getElementById('selectedVibe').value === "") {
+                 return alert("Por favor selecciona un estilo de decoración.");
+            }
+
+            showStep(step);
+        }
+
+        function prevStep(step) {
+            showStep(step);
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            
+            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+            document.getElementById(`dot${stepNumber}`).classList.add('active');
+        }
+
+        /* --- 5. DATA CHART & LOGIC --- */
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        
+        let sentimentChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Emoción', 'Expectativas', 'Riesgo Estrés', 'Logística', 'Formalidad'],
+                datasets: [
+                    {
+                        label: 'Tu Evento',
+                        data: [90, 90, 80, 85, 50], // Default Boda
+                        backgroundColor: 'rgba(197, 160, 89, 0.4)',
+                        borderColor: '#c5a059',
+                        pointBackgroundColor: '#c5a059'
+                    },
+                    {
+                        label: 'Promedio Industria',
+                        data: [50, 50, 50, 50, 50],
+                        backgroundColor: 'rgba(128,128,128, 0.1)',
+                        borderColor: '#aaa',
+                        borderDash: [5, 5]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(128,128,128,0.2)' },
+                        grid: { color: 'rgba(128,128,128,0.2)' },
+                        pointLabels: { font: { size: 14, family: 'Montserrat' } },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        function updateChartHighlight() {
+            const type = document.getElementById('eventType').value;
+            let data = [];
+            
+            // Lógica Estadística Simulada
+            if(type === 'corporativo') data = [20, 70, 30, 60, 95];
+            else if (type === 'social') data = [70, 50, 20, 50, 10];
+            else if (type === 'familia') data = [85, 60, 40, 50, 30]; // Nuevo: Familiares
+            else data = [95, 95, 90, 90, 60]; // Bodas/15
+
+            sentimentChart.data.datasets[0].data = data;
+            sentimentChart.update();
+        }
+
+        function updateChartTheme(isParty) {
+            const color = isParty ? '#00f3ff' : '#c5a059';
+            const bg = isParty ? 'rgba(0, 243, 255, 0.3)' : 'rgba(197, 160, 89, 0.4)';
+            
+            sentimentChart.data.datasets[0].borderColor = color;
+            sentimentChart.data.datasets[0].backgroundColor = bg;
+            sentimentChart.data.datasets[0].pointBackgroundColor = color;
+            sentimentChart.options.scales.r.pointLabels.color = isParty ? '#e0e0e0' : '#2c3e50';
+            sentimentChart.update();
+        }
+
+        /* --- 6. WHATSAPP OUTPUT --- */
+        function sendWhatsApp() {
+            const name = document.getElementById('name').value;
+            const phoneInput = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const company = document.getElementById('company').value;
+            const eventType = document.getElementById('eventType').value;
+            const vibe = document.getElementById('selectedVibe').value;
+            const date = document.getElementById('date').value;
+            const guests = document.getElementById('guests').value;
+
+            // Contexto Estadístico para Ventas
+            let statsNote = "";
+            if (eventType === 'boda' || eventType === '15') statsNote = "🔥 Prioridad Alta: Cliente con alta carga emocional.";
+            if (eventType === 'familia') statsNote = "🏠 Evento Familiar: Foco en calidez y presupuesto.";
+            if (eventType === 'corporativo') statsNote = "💼 Corporativo: Foco en eficiencia y facturación.";
+
+            const message = `
+🌟 *NUEVA CONSULTA GLIM* 🌟
+
+👤 *Cliente:* ${name}
+📞 *Tel:* ${phoneInput}
+📧 *Email:* ${email || 'No especificado'}
+${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
+📅 *Fecha:* ${date}
+👥 *Invitados:* ${guests}
+
+🎨 *Estilo Elegido:* ${vibe}
+🎪 *Tipo:* ${eventType.toUpperCase()}
+
+📊 *Análisis:* ${statsNote}
+            `.trim();
+
+            const url = `https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
