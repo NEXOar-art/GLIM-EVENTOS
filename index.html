@@ -83,8 +83,9 @@
             justify-content: center;
             font-size: 1.2rem;
             opacity: 0.8;
+            transition: all 0.3s;
         }
-        #audioControl:hover { opacity: 1; }
+        #audioControl:hover { opacity: 1; transform: scale(1.05); }
 
         /* --- PARALLAX BACKGROUND --- */
         .parallax-wrapper {
@@ -294,12 +295,12 @@
 </head>
 <body>
 
-    <audio id="backgroundAudio" loop autoplay>
-        <source src="http://googleusercontent.com/file_content/2" type="audio/mp3">
+    <audio id="backgroundAudio" loop>
+        <source src="http://googleusercontent.com/file_content/3" type="audio/mp3">
         Tu navegador no soporta el elemento de audio.
     </audio>
     <button id="audioControl">
-        <i class="fas fa-pause" id="audioIcon"></i>
+        <i class="fas fa-play" id="audioIcon"></i>
     </button>
 
     <div class="parallax-wrapper"></div>
@@ -327,7 +328,7 @@
         <div class="swiper-section">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1549487504-209930f40d89?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1517404215738-ee253aa73d45?q=80&w=2000');">
                         <span>Clásico & Eterno</span>
                     </div>
                     <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1549487504-209930f40d89?q=80&w=2000');">
@@ -466,30 +467,30 @@
             loop: true
         });
 
-        /* --- AUDIO CONTROL (NEW) --- */
+        /* --- AUDIO CONTROL (UPDATED) --- */
         const audio = document.getElementById('backgroundAudio');
         const audioControl = document.getElementById('audioControl');
         const audioIcon = document.getElementById('audioIcon');
 
-        // Intenta reproducir el audio automáticamente (puede ser bloqueado por navegadores)
-        audio.play().catch(error => {
-            console.log("Autoplay bloqueado. El usuario debe interactuar para iniciar el audio.");
-            audioIcon.classList.remove('fa-pause');
-            audioIcon.classList.add('fa-volume-up'); // Muestra el icono de volumen para indicar que está disponible
-        });
-
+        // Intenta reproducir el audio al hacer clic en el botón
         audioControl.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play();
-                audioIcon.classList.remove('fa-volume-up', 'fa-play');
-                audioIcon.classList.add('fa-pause');
+                // Si está pausado, intenta reproducir
+                audio.play().then(() => {
+                    audioIcon.classList.remove('fa-play');
+                    audioIcon.classList.add('fa-pause');
+                }).catch(error => {
+                    // Manejo si el navegador aún bloquea la reproducción
+                    console.error("No se pudo iniciar la reproducción:", error);
+                    alert("Por favor, interactúa con la página antes de activar la música.");
+                });
             } else {
+                // Si está reproduciendo, pausar
                 audio.pause();
                 audioIcon.classList.remove('fa-pause');
                 audioIcon.classList.add('fa-play');
             }
         });
-
 
         /* --- 2. VIBE DATA & RENDERER (No changes) --- */
         const vibes = [
@@ -672,5 +673,6 @@ ${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
 </body>
 </html>
 "Commit"
+
 
 
