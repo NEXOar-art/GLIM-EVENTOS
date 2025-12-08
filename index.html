@@ -64,28 +64,72 @@
 
         h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 15px 0; }
 
-        /* --- AUDIO PLAYER (NEW) --- */
-        #audioControl {
+        /* --- AUDIO PLAYER (DISEÑO PERSONALIZADO) --- */
+        .music-control {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             z-index: 1000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            color: var(--secondary-bg);
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            opacity: 0.8;
-            transition: all 0.3s;
+            gap: 12px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
         }
-        #audioControl:hover { opacity: 1; transform: scale(1.05); }
+
+        .music-control:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            background: var(--accent-hover);
+        }
+
+        /* Barras de Audio Animadas */
+        .music-bars {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 16px;
+            gap: 3px;
+        }
+
+        .bar {
+            width: 4px;
+            background-color: white;
+            border-radius: 2px;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        .bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+        .bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+        .bar:nth-child(3) { height: 12px; animation-delay: 0.5s; }
+
+        /* Estado Pausado (Animación detenida) */
+        .music-control.paused {
+            background: rgba(44, 62, 80, 0.7); /* Color neutro cuando está apagado */
+            opacity: 0.8;
+        }
+        
+        .music-control.paused .bar {
+            animation: none;
+            height: 4px; /* Barras colapsadas */
+            background-color: #ccc;
+        }
+
+        @keyframes bounce {
+            0% { height: 6px; }
+            100% { height: 100%; }
+        }
 
         /* --- PARALLAX BACKGROUND --- */
         .parallax-wrapper {
@@ -122,7 +166,7 @@
             position: sticky;
             top: 0;
             backdrop-filter: blur(10px);
-            background: rgba(var(--bg-color), 0.8);
+            background: rgba(var(--bg-color), 0.85);
             z-index: 100;
             border-bottom: 1px solid rgba(128,128,128,0.1);
         }
@@ -171,7 +215,7 @@
         }
         .swiper {
             width: 100%;
-            height: 300px;
+            height: 350px; 
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
         }
@@ -179,7 +223,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            font-family: var(--font-display);
             font-weight: bold;
             color: white;
             background-size: cover;
@@ -187,9 +232,9 @@
             position: relative;
         }
         .swiper-slide::before {
-            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3); /* Oscurecer imagen */
         }
-        .swiper-slide span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .swiper-slide span { position: relative; z-index: 2; text-shadow: 0 4px 10px rgba(0,0,0,0.6); }
 
         /* --- FORMULARIO PROGRESIVO AVANZADO --- */
         .form-wrapper {
@@ -220,7 +265,7 @@
         }
         input:focus { border-color: var(--accent-color); background: var(--card-bg); }
 
-        /* Vibe Selector Cards (No changes) */
+        /* Vibe Selector Cards (Smart Accordion) */
         .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
         .vibe-option {
             border: 1px solid rgba(128,128,128,0.2);
@@ -259,7 +304,7 @@
         .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* Calendar Button (New) */
+        /* Calendar Button */
         .calendar-btn {
             display: inline-block;
             margin-top: 10px;
@@ -273,7 +318,7 @@
         }
         .calendar-btn:hover { background: var(--accent-color); color: white;}
 
-        /* --- DATA SECTION (No changes) --- */
+        /* --- DATA SECTION --- */
         .data-section { padding: 80px 20px; background: var(--card-bg); position: relative; z-index: 1;}
         .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
         .intro-data { max-width: 800px; margin: 0 auto 40px; text-align: center; }
@@ -295,13 +340,19 @@
 </head>
 <body>
 
-    <audio id="backgroundAudio" loop>
-        <source src="http://googleusercontent.com/file_content/3" type="audio/mp3">
+    <audio id="bgMusic" loop>
+        <source src="Conexion en el Aire.mp3" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
-    <button id="audioControl">
-        <i class="fas fa-play" id="audioIcon"></i>
-    </button>
+
+    <div class="music-control paused" id="musicBtn" title="Activar/Desactivar Música">
+        <div class="music-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <span id="musicText">Activar Audio</span>
+    </div>
 
     <div class="parallax-wrapper"></div>
     <div class="retro-grid"></div>
@@ -328,16 +379,16 @@
         <div class="swiper-section">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1517404215738-ee253aa73d45?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2000');">
                         <span>Clásico & Eterno</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1549487504-209930f40d89?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2000');">
                         <span>Fiesta Neón</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000');">
                         <span>Bodas Vintage</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1561930661-db1d56cc3316?q=80&w=2000');">
                         <span>Glamour Luxury</span>
                     </div>
                 </div>
@@ -392,7 +443,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Estilo de Decoración (Selecciona uno)</label>
+                        <label>Estilo de Decoración (Selecciona uno para ver detalles)</label>
                         <div class="vibe-grid" id="vibeContainer">
                             </div>
                         <input type="hidden" id="selectedVibe" value="">
@@ -410,13 +461,13 @@
                         <label>Fecha Deseada</label>
                         <input type="date" id="date">
                         <a href="https://calendar.google.com/calendar/embed?src=j8jp34lda8v13qg9eup6vlklit0gr1dc%40import.calendar.google.com&ctz=America%2FArgentina%2FBuenos_Aires" target="_blank" class="calendar-btn">
-                            <i class="fas fa-calendar-alt"></i> Verificar Disponibilidad
+                            <i class="fas fa-calendar-alt"></i> Verificar Disponibilidad en Google Calendar
                         </a>
                         <small style="color:var(--accent-color); margin-top:5px; display:block;">Revisa nuestro calendario antes de confirmar.</small>
                     </div>
                     <div class="form-group">
                         <label>Cantidad de Invitados</label>
-                        <input type="number" id="guests" placeholder="100">
+                        <input type="number" id="guests" placeholder="Ej. 150">
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Atrás</button>
@@ -455,9 +506,6 @@
     </section>
 
     <script>
-        // URL del Calendario de Google
-        const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=j8jp34lda8v13qg9eup6vlklit0gr1dc%40import.calendar.google.com&ctz=America%2FArgentina%2FBuenos_Aires";
-
         /* --- 1. INITIALIZATION & SWIPER --- */
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,
@@ -467,32 +515,35 @@
             loop: true
         });
 
-        /* --- AUDIO CONTROL (UPDATED) --- */
-        const audio = document.getElementById('backgroundAudio');
-        const audioControl = document.getElementById('audioControl');
-        const audioIcon = document.getElementById('audioIcon');
+        /* --- AUDIO LOGIC (UPDATED WITH BARS ANIMATION) --- */
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicText = document.getElementById('musicText');
 
-        // Intenta reproducir el audio al hacer clic en el botón
-        audioControl.addEventListener('click', () => {
+        // Establecer volumen medio
+        audio.volume = 0.5;
+
+        musicBtn.addEventListener('click', () => {
             if (audio.paused) {
-                // Si está pausado, intenta reproducir
+                // Intentar reproducir
                 audio.play().then(() => {
-                    audioIcon.classList.remove('fa-play');
-                    audioIcon.classList.add('fa-pause');
+                    // Si éxito: quitar clase paused (activa la animación CSS)
+                    musicBtn.classList.remove('paused');
+                    musicText.textContent = "Desactivar Audio";
                 }).catch(error => {
-                    // Manejo si el navegador aún bloquea la reproducción
-                    console.error("No se pudo iniciar la reproducción:", error);
-                    alert("Por favor, interactúa con la página antes de activar la música.");
+                    console.log("Auto-play prevenido por navegador, interacción requerida.");
+                    alert("Por políticas del navegador, haz click nuevamente para iniciar la música.");
                 });
             } else {
-                // Si está reproduciendo, pausar
+                // Pausar
                 audio.pause();
-                audioIcon.classList.remove('fa-pause');
-                audioIcon.classList.add('fa-play');
+                // Añadir clase paused (detiene animación y baja barras)
+                musicBtn.classList.add('paused');
+                musicText.textContent = "Activar Audio";
             }
         });
 
-        /* --- 2. VIBE DATA & RENDERER (No changes) --- */
+        /* --- 2. VIBE DATA & RENDERER --- */
         const vibes = [
             { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros (blanco, dorado), flores naturales, velas, mantelería fina. Ideal para bodas de gala.' },
             { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel (rosa, lavanda), iluminación cálida, rosas y peonías. Perfecto para bodas íntimas.' },
@@ -527,11 +578,12 @@
             document.getElementById('selectedVibe').value = vibes.find(v => v.id === id).title;
         }
 
-        /* --- 3. THEME ENGINE & PARALLAX (No changes) --- */
+        /* --- 3. THEME ENGINE & PARALLAX --- */
         const themeSwitch = document.getElementById('themeSwitch');
         const body = document.body;
         const heroTitle = document.getElementById('heroTitle');
 
+        // Efecto Parallax en Scroll
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             heroTitle.style.transform = `translateY(${scrolled * 0.4}px)`;
@@ -546,8 +598,9 @@
             updateChartTheme(isParty);
         });
 
-        /* --- 4. FORM NAVIGATION (No changes) --- */
+        /* --- 4. FORM NAVIGATION --- */
         function nextStep(step) {
+            // Validaciones básicas
             if(step === 2) {
                 if(!document.getElementById('name').value || !document.getElementById('phone').value) 
                     return alert("Por favor completa nombre y teléfono.");
@@ -555,13 +608,10 @@
             if(step === 3 && document.getElementById('selectedVibe').value === "") {
                  return alert("Por favor selecciona un estilo de decoración.");
             }
-
             showStep(step);
         }
 
-        function prevStep(step) {
-            showStep(step);
-        }
+        function prevStep(step) { showStep(step); }
 
         function showStep(stepNumber) {
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
@@ -571,7 +621,7 @@
             document.getElementById(`dot${stepNumber}`).classList.add('active');
         }
 
-        /* --- 5. DATA CHART & LOGIC (No changes) --- */
+        /* --- 5. DATA CHART & LOGIC --- */
         const ctx = document.getElementById('sentimentChart').getContext('2d');
         
         let sentimentChart = new Chart(ctx, {
@@ -617,7 +667,7 @@
             if(type === 'corporativo') data = [20, 70, 30, 60, 95];
             else if (type === 'social') data = [70, 50, 20, 50, 10];
             else if (type === 'familia') data = [85, 60, 40, 50, 30]; 
-            else data = [95, 95, 90, 90, 60]; 
+            else data = [95, 95, 90, 90, 60]; // Default Bodas/15
 
             sentimentChart.data.datasets[0].data = data;
             sentimentChart.update();
@@ -634,7 +684,7 @@
             sentimentChart.update();
         }
 
-        /* --- 6. WHATSAPP OUTPUT (No changes) --- */
+        /* --- 6. WHATSAPP OUTPUT --- */
         function sendWhatsApp() {
             const name = document.getElementById('name').value;
             const phoneInput = document.getElementById('phone').value;
@@ -645,6 +695,7 @@
             const date = document.getElementById('date').value;
             const guests = document.getElementById('guests').value;
 
+            // Contexto Estadístico para mensaje
             let statsNote = "";
             if (eventType === 'boda' || eventType === '15') statsNote = "🔥 Prioridad Alta: Cliente con alta carga emocional.";
             if (eventType === 'familia') statsNote = "🏠 Evento Familiar: Foco en calidez y presupuesto.";
@@ -673,6 +724,7 @@ ${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
 </body>
 </html>
 "Commit"
+
 
 
 
