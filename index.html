@@ -64,12 +64,34 @@
 
         h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 15px 0; }
 
+        /* --- AUDIO PLAYER (NEW) --- */
+        #audioControl {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: var(--secondary-bg);
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        #audioControl:hover { opacity: 1; }
+
         /* --- PARALLAX BACKGROUND --- */
         .parallax-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 120vh;
             z-index: -1;
-            background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* Textura sutil */
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
             opacity: var(--parallax-opacity);
             transform: translateZ(-1px) scale(2);
             pointer-events: none;
@@ -129,7 +151,7 @@
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             margin-bottom: 20px;
             text-shadow: var(--glow);
-            transition: transform 0.1s; /* Para efecto parallax JS */
+            transition: transform 0.1s; 
         }
 
         .storytelling-box {
@@ -175,7 +197,7 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 650px; /* Más ancho para las explicaciones */
+            max-width: 650px; 
             position: relative;
             border-top: 4px solid var(--accent-color);
             margin-bottom: 80px;
@@ -197,7 +219,7 @@
         }
         input:focus { border-color: var(--accent-color); background: var(--card-bg); }
 
-        /* Vibe Selector Cards */
+        /* Vibe Selector Cards (No changes) */
         .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
         .vibe-option {
             border: 1px solid rgba(128,128,128,0.2);
@@ -210,7 +232,7 @@
         }
         .vibe-option.selected {
             border-color: var(--accent-color);
-            background: rgba(197, 160, 89, 0.1); /* Gold tint default */
+            background: rgba(197, 160, 89, 0.1); 
         }
         body.party-mode .vibe-option.selected { background: rgba(0, 243, 255, 0.1); }
         
@@ -236,12 +258,21 @@
         .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* Progress Dots */
-        .progress-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; }
-        .dot { width: 10px; height: 10px; background: rgba(128,128,128,0.3); border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: var(--accent-color); transform: scale(1.3); }
+        /* Calendar Button (New) */
+        .calendar-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .calendar-btn:hover { background: var(--accent-color); color: white;}
 
-        /* --- DATA SECTION --- */
+        /* --- DATA SECTION (No changes) --- */
         .data-section { padding: 80px 20px; background: var(--card-bg); position: relative; z-index: 1;}
         .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
         .intro-data { max-width: 800px; margin: 0 auto 40px; text-align: center; }
@@ -262,6 +293,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <audio id="backgroundAudio" loop autoplay>
+        <source src="http://googleusercontent.com/file_content/2" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <button id="audioControl">
+        <i class="fas fa-pause" id="audioIcon"></i>
+    </button>
 
     <div class="parallax-wrapper"></div>
     <div class="retro-grid"></div>
@@ -288,10 +327,10 @@
         <div class="swiper-section">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519225448526-0ca85c935661?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1549487504-209930f40d89?q=80&w=2000');">
                         <span>Clásico & Eterno</span>
                     </div>
-                    <div class="swiper-slide" style="background-image:glimfoto5.jpeg;">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1549487504-209930f40d89?q=80&w=2000');">
                         <span>Fiesta Neón</span>
                     </div>
                     <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000');">
@@ -369,7 +408,10 @@
                     <div class="form-group">
                         <label>Fecha Deseada</label>
                         <input type="date" id="date">
-                        <small style="color:var(--accent-color); margin-top:5px; display:block;"><i class="fas fa-calendar-check"></i> Verificando disponibilidad en tiempo real...</small>
+                        <a href="https://calendar.google.com/calendar/embed?src=j8jp34lda8v13qg9eup6vlklit0gr1dc%40import.calendar.google.com&ctz=America%2FArgentina%2FBuenos_Aires" target="_blank" class="calendar-btn">
+                            <i class="fas fa-calendar-alt"></i> Verificar Disponibilidad
+                        </a>
+                        <small style="color:var(--accent-color); margin-top:5px; display:block;">Revisa nuestro calendario antes de confirmar.</small>
                     </div>
                     <div class="form-group">
                         <label>Cantidad de Invitados</label>
@@ -412,6 +454,9 @@
     </section>
 
     <script>
+        // URL del Calendario de Google
+        const GOOGLE_CALENDAR_URL = "https://calendar.google.com/calendar/embed?src=j8jp34lda8v13qg9eup6vlklit0gr1dc%40import.calendar.google.com&ctz=America%2FArgentina%2FBuenos_Aires";
+
         /* --- 1. INITIALIZATION & SWIPER --- */
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,
@@ -421,7 +466,32 @@
             loop: true
         });
 
-        /* --- 2. VIBE DATA & RENDERER --- */
+        /* --- AUDIO CONTROL (NEW) --- */
+        const audio = document.getElementById('backgroundAudio');
+        const audioControl = document.getElementById('audioControl');
+        const audioIcon = document.getElementById('audioIcon');
+
+        // Intenta reproducir el audio automáticamente (puede ser bloqueado por navegadores)
+        audio.play().catch(error => {
+            console.log("Autoplay bloqueado. El usuario debe interactuar para iniciar el audio.");
+            audioIcon.classList.remove('fa-pause');
+            audioIcon.classList.add('fa-volume-up'); // Muestra el icono de volumen para indicar que está disponible
+        });
+
+        audioControl.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                audioIcon.classList.remove('fa-volume-up', 'fa-play');
+                audioIcon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                audioIcon.classList.remove('fa-pause');
+                audioIcon.classList.add('fa-play');
+            }
+        });
+
+
+        /* --- 2. VIBE DATA & RENDERER (No changes) --- */
         const vibes = [
             { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros (blanco, dorado), flores naturales, velas, mantelería fina. Ideal para bodas de gala.' },
             { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel (rosa, lavanda), iluminación cálida, rosas y peonías. Perfecto para bodas íntimas.' },
@@ -456,12 +526,11 @@
             document.getElementById('selectedVibe').value = vibes.find(v => v.id === id).title;
         }
 
-        /* --- 3. THEME ENGINE & PARALLAX --- */
+        /* --- 3. THEME ENGINE & PARALLAX (No changes) --- */
         const themeSwitch = document.getElementById('themeSwitch');
         const body = document.body;
         const heroTitle = document.getElementById('heroTitle');
 
-        // Simple Parallax Effect on Title
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             heroTitle.style.transform = `translateY(${scrolled * 0.4}px)`;
@@ -476,9 +545,8 @@
             updateChartTheme(isParty);
         });
 
-        /* --- 4. FORM NAVIGATION --- */
+        /* --- 4. FORM NAVIGATION (No changes) --- */
         function nextStep(step) {
-            // Validation simple
             if(step === 2) {
                 if(!document.getElementById('name').value || !document.getElementById('phone').value) 
                     return alert("Por favor completa nombre y teléfono.");
@@ -502,7 +570,7 @@
             document.getElementById(`dot${stepNumber}`).classList.add('active');
         }
 
-        /* --- 5. DATA CHART & LOGIC --- */
+        /* --- 5. DATA CHART & LOGIC (No changes) --- */
         const ctx = document.getElementById('sentimentChart').getContext('2d');
         
         let sentimentChart = new Chart(ctx, {
@@ -512,7 +580,7 @@
                 datasets: [
                     {
                         label: 'Tu Evento',
-                        data: [90, 90, 80, 85, 50], // Default Boda
+                        data: [90, 90, 80, 85, 50],
                         backgroundColor: 'rgba(197, 160, 89, 0.4)',
                         borderColor: '#c5a059',
                         pointBackgroundColor: '#c5a059'
@@ -545,11 +613,10 @@
             const type = document.getElementById('eventType').value;
             let data = [];
             
-            // Lógica Estadística Simulada
             if(type === 'corporativo') data = [20, 70, 30, 60, 95];
             else if (type === 'social') data = [70, 50, 20, 50, 10];
-            else if (type === 'familia') data = [85, 60, 40, 50, 30]; // Nuevo: Familiares
-            else data = [95, 95, 90, 90, 60]; // Bodas/15
+            else if (type === 'familia') data = [85, 60, 40, 50, 30]; 
+            else data = [95, 95, 90, 90, 60]; 
 
             sentimentChart.data.datasets[0].data = data;
             sentimentChart.update();
@@ -566,7 +633,7 @@
             sentimentChart.update();
         }
 
-        /* --- 6. WHATSAPP OUTPUT --- */
+        /* --- 6. WHATSAPP OUTPUT (No changes) --- */
         function sendWhatsApp() {
             const name = document.getElementById('name').value;
             const phoneInput = document.getElementById('phone').value;
@@ -577,7 +644,6 @@
             const date = document.getElementById('date').value;
             const guests = document.getElementById('guests').value;
 
-            // Contexto Estadístico para Ventas
             let statsNote = "";
             if (eventType === 'boda' || eventType === '15') statsNote = "🔥 Prioridad Alta: Cliente con alta carga emocional.";
             if (eventType === 'familia') statsNote = "🏠 Evento Familiar: Foco en calidez y presupuesto.";
@@ -604,7 +670,7 @@ ${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
         }
     </script>
 </body>
-
 </html>
 "Commit"
+
 
