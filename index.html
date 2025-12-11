@@ -5,431 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLIM EVENTOS | Experiencia Inmersiva</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?v=2025"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css?v=2025" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js?v=2025"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght=500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CORE VARIABLES (THEME ENGINE) --- */
+        /* --- VARIABLES DEL TEMA --- */
         :root {
-            /* Modo Clásico (Silent Luxury) */
             --bg-color: #f0f2f5;
             --text-color: #2c3e50;
             --accent-color: #c5a059; /* Gold */
             --accent-hover: #b08d45;
-            --secondary-bg: #ffffff;
             --card-bg: #ffffff;
+            --input-bg: #f8f9fa;
             --font-main: 'Montserrat', sans-serif;
             --font-display: 'Playfair Display', serif;
-            --shadow: 0 15px 35px rgba(0,0,0,0.08);
             --border-radius: 8px;
+            --shadow: 0 15px 35px rgba(0,0,0,0.08);
             --btn-gradient: linear-gradient(135deg, #c5a059 0%, #d4af37 100%);
-            --glow: none;
-            --input-bg: #f8f9fa;
-            --grid-opacity: 0;
-            --parallax-opacity: 0.05;
         }
 
-        /* Modo Fiesta (Retrosynth / Cyberpunk) */
         body.party-mode {
             --bg-color: #0b0c15;
             --text-color: #e0e0e0;
-            --accent-color: #00f3ff; /* Cyan Neon */
-            --accent-hover: #00c2cc;
-            --secondary-bg: #151625;
+            --accent-color: #00f3ff;
             --card-bg: #1a1b2e;
-            --font-main: 'Montserrat', sans-serif;
-            --font-display: 'Orbitron', sans-serif;
-            --shadow: 0 0 30px rgba(0, 243, 255, 0.15);
-            --border-radius: 16px;
-            --btn-gradient: linear-gradient(90deg, #ff00ff, #00f3ff);
-            --glow: 0 0 15px var(--accent-color);
             --input-bg: #23243a;
-            --grid-opacity: 0.3;
-            --parallax-opacity: 0.1;
+            --font-display: 'Orbitron', sans-serif;
+            --border-radius: 16px;
+            --shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+            --btn-gradient: linear-gradient(90deg, #ff00ff, #00f3ff);
         }
 
-        /* --- GLOBAL STYLES --- */
+        /* --- ESTILOS GLOBALES --- */
         * { box-sizing: border-box; transition: background 0.4s ease, color 0.4s ease, border 0.4s ease; }
-        
-        body {
-            margin: 0;
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
+        body { margin: 0; font-family: var(--font-main); background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; line-height: 1.6; }
         h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 15px 0; }
-
-        /* --- AUDIO PLAYER --- */
-        .music-control {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 24px;
-            border-radius: 50px;
-            background: var(--accent-color);
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            border: 2px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-        }
-
-        .music-control:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            background: var(--accent-hover);
-        }
-
-        .music-bars {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 16px;
-            gap: 3px;
-        }
-
-        .bar {
-            width: 4px;
-            background-color: white;
-            border-radius: 2px;
-            animation: bounce 0.5s infinite alternate;
-        }
-
-        .bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
-        .bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
-        .bar:nth-child(3) { height: 12px; animation-delay: 0.5s; }
-
-        .music-control.paused {
-            background: rgba(44, 62, 80, 0.7);
-            opacity: 0.8;
-        }
         
-        .music-control.paused .bar {
-            animation: none;
-            height: 4px;
-            background-color: #ccc;
-        }
+        /* Audio Player */
+        .music-control { position: fixed; bottom: 25px; right: 25px; z-index: 1000; display: flex; align-items: center; gap: 12px; padding: 12px 24px; border-radius: 50px; background: var(--accent-color); color: white; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.3); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+        .music-bars { display: flex; align-items: flex-end; height: 16px; gap: 3px; }
+        .bar { width: 4px; background: white; border-radius: 2px; animation: bounce 0.5s infinite alternate; }
+        .music-control.paused .bar { animation: none; height: 4px; background: #ccc; }
+        @keyframes bounce { 0% { height: 6px; } 100% { height: 100%; } }
 
-        @keyframes bounce {
-            0% { height: 6px; }
-            100% { height: 100%; }
-        }
+        /* Header & Hero */
+        header { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); background: rgba(var(--bg-color), 0.85); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(128,128,128,0.1); }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; }
+        .hero { min-height: 90vh; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 100px 20px 40px; }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+        .storytelling-box { max-width: 700px; margin: 0 auto 50px; font-size: 1.1rem; opacity: 0.9; }
 
-        /* --- BACKGROUNDS --- */
-        .parallax-wrapper {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 120vh;
-            z-index: -1;
-            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
-            opacity: var(--parallax-opacity);
-            transform: translateZ(-1px) scale(2);
-            pointer-events: none;
-        }
-
-        .retro-grid {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            background-image: 
-                linear-gradient(var(--accent-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--accent-color) 1px, transparent 1px);
-            background-size: 60px 60px;
-            background-position: center bottom;
-            opacity: var(--grid-opacity);
-            transform: perspective(500px) rotateX(60deg) translateY(100px) scale(2);
-            z-index: -2;
-            pointer-events: none;
-            transition: opacity 0.8s ease;
-        }
-
-        /* --- HEADER --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 8%;
-            position: sticky;
-            top: 0;
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-color), 0.85);
-            z-index: 100;
-            border-bottom: 1px solid rgba(128,128,128,0.1);
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text-color); }
+        /* Theme Switch */
+        .switch-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .toggle-btn { width: 50px; height: 26px; border-radius: 13px; background: #ccc; position: relative; transition: 0.4s; }
+        .toggle-btn::before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; top: 3px; left: 3px; background: white; transition: 0.4s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        body.party-mode .toggle-btn { background: var(--accent-color); }
+        body.party-mode .toggle-btn::before { transform: translateX(24px); }
+        #modeLabel { font-weight: 600; font-size: 0.9rem; }
+        body.party-mode #modeLabel { color: var(--accent-color); }
         
-        .switch-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
-        .toggle-btn { width: 50px; height: 26px; background: #ccc; border-radius: 50px; position: relative; }
-        .toggle-btn::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; }
-        body.party-mode .toggle-btn { background: #ff00ff; }
-        body.party-mode .toggle-btn::after { transform: translateX(24px); background: #00f3ff; }
-
-        /* --- HERO --- */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 100px 20px 40px;
-            position: relative;
+        /* --- SWIPER 1 (HERO) --- */
+        .swiper-section { width: 100%; max-width: 1200px; margin: 0 auto 50px; padding: 0 20px; }
+        .mySwiper { width: 100%; height: 350px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+        .swiper-slide-hero { display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; height: 100%; }
+        
+        /* Estilos para el video dentro del Swiper 1 */
+        .swiper-slide-hero video { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            z-index: 1; /* Detrás del overlay y el texto */
+        }
+        .swiper-slide-hero img { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            z-index: 1; 
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            margin-bottom: 20px;
-            text-shadow: var(--glow);
-            transition: transform 0.1s; 
-        }
+        .swiper-slide-hero::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 2; }
+        .swiper-slide-hero span { position: relative; z-index: 3; color: white; font-size: 2rem; font-family: var(--font-display); font-weight: bold; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
 
-        .storytelling-box {
-            max-width: 700px;
-            margin: 0 auto 50px;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* --- SWIPER MAIN --- */
-        .swiper-section {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto 50px;
-            padding: 0 20px;
-        }
-        .mySwiper {
-            width: 100%;
-            height: 350px; 
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-        .swiper-slide {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-family: var(--font-display);
-            font-weight: bold;
-            color: white;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .swiper-slide::before {
-            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3);
-        }
-        .swiper-slide span { position: relative; z-index: 2; text-shadow: 0 4px 10px rgba(0,0,0,0.6); }
-
-        /* --- FORM --- */
-        .form-wrapper {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 650px; 
-            position: relative;
-            border-top: 4px solid var(--accent-color);
-            margin-bottom: 80px;
-        }
-
-        /* Progress Dots (CSS AGREGADO) */
-        .progress-dots {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .dot {
-            width: 12px;
-            height: 12px;
-            background: rgba(128,128,128,0.3);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        .dot.active {
-            background: var(--accent-color);
-            transform: scale(1.3);
-        }
-
+        /* --- FORMULARIO & STEP STYLES (Mantenidos) --- */
+        .form-wrapper { background: var(--card-bg); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); width: 100%; max-width: 650px; border-top: 4px solid var(--accent-color); margin-bottom: 80px; }
+        .progress-dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .dot { width: 12px; height: 12px; background: rgba(128,128,128,0.3); border-radius: 50%; }
+        .dot.active { background: var(--accent-color); transform: scale(1.3); }
         .step { display: none; animation: slideUp 0.5s ease; }
         .step.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
+        
         .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-color); }
-        
-        input, select {
-            width: 100%; padding: 14px; border: 2px solid transparent; 
-            border-radius: var(--border-radius); background: var(--input-bg);
-            color: var(--text-color); font-size: 1rem; outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            border-bottom: 2px solid rgba(128,128,128,0.2);
-        }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input, select { width: 100%; padding: 14px; border: 2px solid rgba(128,128,128,0.2); border-radius: var(--border-radius); background: var(--input-bg); color: var(--text-color); outline: none; }
         input:focus { border-color: var(--accent-color); background: var(--card-bg); }
-
-        .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
-        .vibe-option {
-            border: 1px solid rgba(128,128,128,0.2);
-            border-radius: var(--border-radius);
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            background: var(--input-bg);
-            text-align: left;
-        }
-        .vibe-option.selected {
-            border-color: var(--accent-color);
-            background: rgba(197, 160, 89, 0.1); 
-        }
-        body.party-mode .vibe-option.selected { background: rgba(0, 243, 255, 0.1); }
         
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: var(--border-radius); font-weight: bold; cursor: pointer; color: white; }
+        .btn-primary { background: var(--btn-gradient); }
+        .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
+        
+        /* Vibe Grid */
+        .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
+        .vibe-option { border: 1px solid rgba(128,128,128,0.2); border-radius: var(--border-radius); padding: 15px; cursor: pointer; transition: 0.3s; background: var(--input-bg); text-align: left; }
+        .vibe-option.selected { border-color: var(--accent-color); background: rgba(197, 160, 89, 0.1); }
+        body.party-mode .vibe-option.selected { background: rgba(0, 243, 255, 0.1); }
         .vibe-header { font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        .vibe-details { 
-            display: none; 
-            margin-top: 10px; 
-            font-size: 0.85rem; 
-            color: var(--text-color); 
-            opacity: 0.8; 
-            border-top: 1px solid rgba(128,128,128,0.2);
-            padding-top: 10px;
-        }
+        .vibe-details { display: none; margin-top: 10px; font-size: 0.85rem; color: var(--text-color); opacity: 0.8; border-top: 1px solid rgba(128,128,128,0.2); padding-top: 10px; }
         .vibe-option.active .vibe-details { display: block; }
 
-        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
-        .btn {
-            flex: 1; padding: 15px; border: none; border-radius: var(--border-radius);
-            font-weight: bold; cursor: pointer; font-size: 1rem;
-        }
-        .btn-primary { background: var(--btn-gradient); color: white; }
-        .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-
-        .calendar-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: var(--text-color);
-            color: var(--bg-color);
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
+        /* Google Calendar Button */
+        .calendar-btn { 
+            display: inline-block; margin-top: 10px; padding: 10px 15px; background: var(--text-color); 
+            color: var(--bg-color); border-radius: var(--border-radius); text-decoration: none; 
+            font-size: 0.9rem; font-weight: 600; 
         }
         .calendar-btn:hover { background: var(--accent-color); color: white;}
 
-        /* --- 2ND CAROUSEL: COVERFLOW 3D GALLERY --- */
-        .immersive-gallery {
-            width: 100%;
-            padding: 60px 0;
-            background: rgba(0,0,0,0.02);
+        /* --- SWIPER 2: GALERÍA 3D (Mantenida) --- */
+        .galeria { width: 100%; padding: 80px 0; overflow: hidden; background: rgba(0,0,0,0.02); text-align: center; }
+        .galeria .swiper { width: 100%; padding: 50px 0; }
+        .galeria .swiper-slide { 
+            background-size: cover; background-position: center; width: 300px; height: 400px; 
+            border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        .slide-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; text-align: left; }
+        .rating-badge { background: var(--accent-color); color: white; padding: 5px 10px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-bottom: 10px; }
+
+        /* --- DATA SECTION (Mantenida) --- */
+        .data-section { padding: 80px 20px; background: var(--bg-color); }
+        .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
+        .intro-data h2 { color: var(--accent-color); font-size: 2.2rem; margin-bottom: 40px; }
+        
+        .kpi-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            max-width: 1000px; 
+            margin: 40px auto 0; 
+        }
+
+        .kpi-card { 
+            padding: 25px; 
+            border-radius: var(--border-radius); 
+            background: var(--card-bg); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--accent-color);
+            text-align: left;
+            position: relative;
             overflow: hidden;
-            text-align: center;
+        }
+
+        .kpi-card h4 {
+            font-family: var(--font-main);
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .kpi-card h4::before {
+            content: '';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 10px;
+            color: var(--accent-color);
         }
         
-        .immersive-gallery h2 { margin-bottom: 40px; font-size: 2rem; color: var(--text-color); }
+        /* Iconos de las tarjetas */
+        .kpi-card:nth-child(1) h4::before { content: "\f004"; } 
+        .kpi-card:nth-child(2) h4::before { content: "\f0c5"; } 
+        .kpi-card:nth-child(3) h4::before { content: "\f02d"; } 
 
-        .mySwiper2 {
-            width: 100%;
-            padding-top: 50px;
-            padding-bottom: 50px;
-        }
-
-        .mySwiper2 .swiper-slide {
-            background-position: center;
-            background-size: cover;
-            width: 300px;
-            height: 400px;
-            border-radius: 15px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            filter: brightness(0.8);
-            transition: filter 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-            text-align: left;
-        }
-
-        .mySwiper2 .swiper-slide-active {
-            filter: brightness(1.1);
-            box-shadow: 0 20px 60px rgba(var(--accent-color), 0.4);
-            border: 1px solid var(--accent-color);
-        }
-
-        .slide-content h4 {
-            color: white;
-            font-size: 1.2rem;
+        .kpi-card p {
+            font-size: 0.9rem;
             margin: 0;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            opacity: 0.8;
         }
-        .slide-content p {
-            color: #ddd;
-            font-size: 0.8rem;
-            margin: 5px 0 0;
+        body.party-mode .kpi-card {
+            border-left-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
         }
-        .rating-badge {
-            background: var(--accent-color);
-            color: white;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 5px;
-            font-weight: bold;
+        body.party-mode .kpi-card h4, body.party-mode .kpi-card h4::before {
+            color: var(--accent-color);
         }
-
-        /* --- DATA SECTION --- */
-        .data-section { padding: 80px 20px; background: var(--card-bg); position: relative; z-index: 1;}
-        .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
-        .intro-data { max-width: 800px; margin: 0 auto 40px; text-align: center; }
-        .kpi-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px; max-width: 1000px; margin: 40px auto 0;
-        }
-        .kpi-card {
-            padding: 20px; border-radius: var(--border-radius);
-            background: var(--input-bg); border-left: 3px solid var(--accent-color);
-        }
-
-        /* Scrollbar custom */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
-
     </style>
 </head>
 <body>
 
     <audio id="bgMusic" loop>
         <source src="Conexion en el Aire.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
     </audio>
 
-    <div class="music-control paused" id="musicBtn" title="Activar/Desactivar Música">
+    <div class="music-control paused" id="musicBtn">
         <div class="music-bars">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
         </div>
         <span id="musicText">Activar Audio</span>
     </div>
-
-    <div class="parallax-wrapper"></div>
-    <div class="retro-grid"></div>
 
     <header>
         <div class="logo">GLIM EVENTOS</div>
@@ -441,28 +221,27 @@
 
     <section class="hero" id="heroSection">
         <h1 id="heroTitle">Silent Luxury & Elegance</h1>
-        
         <div class="storytelling-box">
-            <p id="heroSubtitle">
-                Diseñamos universos donde la realidad se suspende. 
-                Ya sea la elegancia atemporal de una boda clásica o la energía eléctrica de una fiesta neón, 
-                cada detalle es una obra de ingeniería emocional.
-            </p>
+            <p>Diseñamos universos donde la realidad se suspende. Cada detalle es una obra de ingeniería emocional.</p>
         </div>
 
         <div class="swiper-section">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2000');">
+                    <div class="swiper-slide swiper-slide-hero">
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2000" alt="Clásico">
                         <span>Clásico & Eterno</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2000');">
+                    <div class="swiper-slide swiper-slide-hero">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2000" alt="Fiesta">
                         <span>Fiesta Neón</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000');">
+                    <div class="swiper-slide swiper-slide-hero">
+                        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000" alt="Vintage">
                         <span>Bodas Vintage</span>
                     </div>
-                    <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2000');">
+                    <div class="swiper-slide swiper-slide-hero" id="luxurySlide">
+                        <video id="glimVideo" src="video glim.mp4" loop muted playsinline preload="auto"></video>
                         <span>Glamour Luxury</span>
                     </div>
                 </div>
@@ -472,39 +251,20 @@
 
         <div class="form-wrapper">
             <div class="progress-dots">
-                <div class="dot active" id="dot1"></div>
-                <div class="dot" id="dot2"></div>
-                <div class="dot" id="dot3"></div>
+                <div class="dot active" id="dot1"></div><div class="dot" id="dot2"></div><div class="dot" id="dot3"></div>
             </div>
-
             <form id="glimForm">
-                
                 <div class="step active" id="step1">
                     <h3>01. Identidad Digital</h3>
-                    <div class="form-group">
-                        <label>Nombre Completo</label>
-                        <input type="text" id="name" placeholder="Tu nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Celular / WhatsApp</label>
-                        <input type="tel" id="phone" placeholder="+54 9 ..." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email (Opcional)</label>
-                        <input type="email" id="email" placeholder="contacto@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Empresa (Solo Corporativo)</label>
-                        <input type="text" id="company" placeholder="Nombre de la empresa">
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Continuar <i class="fas fa-arrow-right"></i></button>
-                    </div>
+                    <div class="form-group"><label>Nombre Completo</label><input type="text" id="name" placeholder="Tu nombre" required></div>
+                    <div class="form-group"><label>Celular / WhatsApp</label><input type="tel" id="phone" placeholder="+54 9 ..." required></div>
+                    <div class="form-group"><label>Email (Opcional)</label><input type="email" id="email" placeholder="contacto@email.com"></div>
+                    <div class="form-group"><label>Empresa (Solo Corporativo)</label><input type="text" id="company" placeholder="Nombre de la empresa"></div>
+                    <div class="btn-group"><button type="button" class="btn btn-primary" onclick="nextStep(2)">Continuar <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
                 <div class="step" id="step2">
                     <h3>02. Arquitectura del Evento</h3>
-                    
                     <div class="form-group">
                         <label>Tipo de Evento</label>
                         <select id="eventType" onchange="updateChartHighlight()">
@@ -515,14 +275,11 @@
                             <option value="social">🎉 Evento Social / Fiesta</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Estilo de Decoración (Selecciona uno para ver detalles)</label>
-                        <div class="vibe-grid" id="vibeContainer">
-                            </div>
+                        <div class="vibe-grid" id="vibeContainer"></div>
                         <input type="hidden" id="selectedVibe" value="">
                     </div>
-
                     <div class="btn-group">
                         <button type="button" class="btn btn-secondary" onclick="prevStep(1)">Atrás</button>
                         <button type="button" class="btn btn-primary" onclick="nextStep(3)">Siguiente <i class="fas fa-arrow-right"></i></button>
@@ -548,294 +305,198 @@
                         <button type="button" class="btn btn-primary" onclick="sendWhatsApp()">🚀 Finalizar Experiencia</button>
                     </div>
                 </div>
-
             </form>
         </div>
     </section>
 
-    <section class="immersive-gallery">
+    <section class="galeria">
         <h2>Experiencias Recientes</h2>
         <div class="swiper mySwiper2">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800')">
-                    <div class="slide-content">
-                        <div class="rating-badge">9.8/10</div>
-                        <h4>Gala de Noche</h4>
-                        <p>Iluminación puntual</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('glimfoto1.jpg');">
+                    <div class="slide-content"><div class="rating-badge">9.8/10</div><h4>Gala de Noche</h4><p>Iluminación puntual</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800')">
-                    <div class="slide-content">
-                        <div class="rating-badge">9.6/10</div>
-                        <h4>Vestidos de 15</h4>
-                        <p>Cómo elegir el estilo perfecto.</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800');">
+                    <div class="slide-content"><div class="rating-badge">9.6/10</div><h4>Vestidos de 15</h4><p>Estilo perfecto.</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:url('glimfoto5.jpeg')">
-                    <div class="slide-content">
-                        <div class="rating-badge">10/10</div>
-                        <h4>Vibra Neón</h4>
-                        <p>Efectos visuales</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('glimfoto5.jpeg');">
+                    <div class="slide-content"><div class="rating-badge">10/10</div><h4>Vibra Neón</h4><p>Efectos visuales</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1520342868574-5fa3804e551c?q=80&w=800')">
-                    <div class="slide-content">
-                        <div class="rating-badge">9.9/10</div>
-                        <h4>Exteriores</h4>
-                        <p>Naturaleza integrada</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1520342868574-5fa3804e551c?q=80&w=800');">
+                    <div class="slide-content"><div class="rating-badge">9.9/10</div><h4>Exteriores</h4><p>Naturaleza integrada</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:url('glimfoto6.jpeg')">
-                    <div class="slide-content">
-                        <div class="rating-badge">9.9/10</div>
-                        <h4>Enamorados</h4>
-                        <p>El día de la unión</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('glimfoto10.jpeg');">
+                    <div class="slide-content"><div class="rating-badge">9.9/10</div><h4>Enamorados</h4><p>El día de la unión</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800')">
-                    <div class="slide-content">
-                        <div class="rating-badge">9.7/10</div>
-                        <h4>Alta Costura</h4>
-                        <p>Detalles finos</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800');">
+                    <div class="slide-content"><div class="rating-badge">9.7/10</div><h4>Alta Costura</h4><p>Detalles finos</p></div>
                 </div>
-                <div class="swiper-slide" style="background-image:('glimfoto3.jpeg')">
-                    <div class="slide-content">
-                        <div class="rating-badge">10/10</div>
-                        <h4>Intimidad</h4>
-                        <p>Micro-eventos</p>
-                    </div>
+
+                <div class="swiper-slide" style="background-image: url('glimfoto3.jpeg');">
+                    <div class="slide-content"><div class="rating-badge">10/10</div><h4>Intimidad</h4><p>Micro-eventos</p></div>
                 </div>
+
             </div>
             <div class="swiper-pagination"></div>
         </div>
     </section>
 
     <section class="data-section">
-        <div class="intro-data">
-            <h2>📊 Inteligencia de Eventos</h2>
-            <p>Comparamos tu tipo de evento con nuestra base de datos histórica para prever necesidades emocionales y logísticas.</p>
-        </div>
+        <div class="intro-data"><h2 style="text-align: center;">📊 Resultados de Inteligencia de Eventos</h2></div>
         
-        <div class="chart-container">
-            <canvas id="sentimentChart"></canvas>
-        </div>
-
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 50px; font-size: 1.1rem; opacity: 0.9;">
+            Según el tipo de evento seleccionado, estos son los factores críticos de éxito y su ponderación.
+        </p>
+        
+        <div class="chart-container"><canvas id="sentimentChart"></canvas></div>
+        
         <div class="kpi-grid">
             <div class="kpi-card">
-                <h4><i class="fas fa-heartbeat"></i> Intensidad</h4>
-                <p>Nivel de carga emocional esperada en los anfitriones e invitados.</p>
+                <h4>Intensidad</h4>
+                <p>Carga emocional y memorabilidad del evento.</p>
             </div>
             <div class="kpi-card">
-                <h4><i class="fas fa-tasks"></i> Logística</h4>
-                <p>Complejidad de organización y coordinación de proveedores.</p>
+                <h4>Logística</h4>
+                <p>Complejidad técnica, coordinación de proveedores y tiempos.</p>
             </div>
             <div class="kpi-card">
-                <h4><i class="fas fa-user-tie"></i> Protocolo</h4>
-                <p>Grado de formalidad y estructura requerida.</p>
+                <h4>Protocolo</h4>
+                <p>Grado de formalidad, etiqueta y estructura requerida.</p>
             </div>
         </div>
     </section>
 
     <script>
-        /* --- 1. INITIALIZATION & SWIPER 1 (HERO) --- */
-        var swiper = new Swiper(".mySwiper", {
-            spaceBetween: 30,
-            centeredSlides: true,
-            autoplay: { delay: 3500, disableOnInteraction: false },
-            pagination: { el: ".swiper-pagination", clickable: true },
-            loop: true
-        });
+        const glimVideo = document.getElementById('glimVideo');
 
-        /* --- 2. SWIPER 2 (COVERFLOW 3D EFFECT) --- */
+        // --- 1. SWIPER INITIALIZATION ---
+        var swiper = new Swiper(".mySwiper", { 
+            spaceBetween: 30, 
+            centeredSlides: true, 
+            autoplay: { delay: 3500 }, 
+            pagination: { el: ".swiper-pagination", clickable: true }, 
+            loop: true,
+            // AÑADIDO: Manejo de reproducción/pausa del video al cambiar de slide
+            on: {
+                slideChangeTransitionStart: function () {
+                    if (glimVideo) {
+                        // Pausar el video si el slide no es el del video
+                        const luxurySlideIndex = 3; // Índice de la tarjeta "Glamour Luxury" (0-indexed)
+                        if (this.activeIndex % this.slides.length !== luxurySlideIndex) {
+                            glimVideo.pause();
+                        }
+                    }
+                },
+                slideChangeTransitionEnd: function () {
+                    if (glimVideo) {
+                        const luxurySlideIndex = 3; 
+                        // Reproducir el video si el slide actual es el del video
+                        if (this.activeIndex % this.slides.length === luxurySlideIndex) {
+                            glimVideo.play().catch(e => console.error("Error al reproducir el video:", e));
+                        }
+                    }
+                }
+            }
+        });
+        
+        // SWIPER 2 (3D REAL - COVERFLOW)
         var swiper2 = new Swiper(".mySwiper2", {
-            effect: "coverflow",
-            grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: "auto",
-            coverflowEffect: {
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-            },
-            initialSlide: 1
+            effect: "coverflow", grabCursor: true, centeredSlides: true, slidesPerView: "auto",
+            coverflowEffect: { rotate: 50, stretch: 0, depth: 100, modifier: 1, slideShadows: true, },
+            pagination: { el: ".swiper-pagination" }, initialSlide: 1
         });
 
-        /* --- AUDIO LOGIC --- */
+        // --- 2. AUDIO PLAYER LOGIC ---
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         const musicText = document.getElementById('musicText');
-
-        // Establecer volumen medio
         audio.volume = 0.5;
 
         musicBtn.addEventListener('click', () => {
             if (audio.paused) {
-                // Intentar reproducir
                 audio.play().then(() => {
-                    // Si éxito: quitar clase paused (activa la animación CSS)
                     musicBtn.classList.remove('paused');
                     musicText.textContent = "Desactivar Audio";
-                }).catch(error => {
-                    console.log("Auto-play prevenido por navegador, interacción requerida.");
-                    alert("Por políticas del navegador, haz click nuevamente para iniciar la música.");
-                });
+                }).catch(e => console.error("Error al reproducir audio:", e));
             } else {
-                // Pausar
                 audio.pause();
-                // Añadir clase paused (detiene animación y baja barras)
                 musicBtn.classList.add('paused');
                 musicText.textContent = "Activar Audio";
             }
         });
 
-        /* --- 3. VIBE DATA & RENDERER --- */
+        // --- 3. THEME SWITCH LOGIC ---
+        const themeSwitch = document.getElementById('themeSwitch');
+        const body = document.body;
+        const modeLabel = document.getElementById('modeLabel');
+
+        themeSwitch.addEventListener('click', () => {
+            body.classList.toggle('party-mode');
+            const isPartyMode = body.classList.contains('party-mode');
+            modeLabel.textContent = isPartyMode ? 'MODO FIESTA' : 'CLÁSICO';
+            updateChartTheme(isPartyMode);
+            if (!audio.paused) {
+                musicBtn.style.background = isPartyMode ? 'var(--accent-color)' : '#c5a059';
+            }
+        });
+
+        // --- 4. VIBE DATA & RENDERER ---
         const vibes = [
-            { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros (blanco, dorado), flores naturales, velas, mantelería fina. Ideal para bodas de gala.' },
-            { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel (rosa, lavanda), iluminación cálida, rosas y peonías. Perfecto para bodas íntimas.' },
-            { id: 'vintage', title: '3. Vintage', desc: 'Elementos antiguos, maletas, encajes, madera desgastada. Popular en Bodas y XV.' },
-            { id: 'rustico', title: '4. Rústico / Campestre', desc: 'Madera, yute, mason jars, flores silvestres. Ideal para aire libre o quintas.' },
-            { id: 'moderno', title: '5. Moderno / Minimalista', desc: 'Líneas limpias, monocromático, vidrio, metal. Estructuras geométricas. Bodas urbanas.' },
-            { id: 'tematico', title: '6. Temático', desc: 'Basado en idea central (Playa, Cine, Boho). Decoración 100% personalizada.' },
-            { id: 'glamour', title: '7. Glamour / Luxury', desc: 'Brillos, espejos, chandeliers. Paleta dorada/negra. Eventos de alta distinción.' }
+            { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros, flores naturales, velas. Ideal para bodas de gala.' },
+            { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel, iluminación cálida. Perfecto para bodas íntimas.' },
+            { id: 'vintage', title: '3. Vintage', desc: 'Elementos antiguos, encajes, madera desgastada.' },
+            { id: 'rustico', title: '4. Rústico / Campestre', desc: 'Madera, yute, aire libre o quintas.' },
+            { id: 'moderno', title: '5. Moderno / Minimalista', desc: 'Líneas limpias, monocromático, vidrio, metal.' },
+            { id: 'tematico', title: '6. Temático', desc: 'Basado en idea central (Playa, Cine, Boho).' },
+            { id: 'glamour', title: '7. Glamour / Luxury', desc: 'Brillos, espejos, paleta dorada/negra.' }
         ];
 
         const vibeContainer = document.getElementById('vibeContainer');
-        
-        vibes.forEach(v => {
-            const div = document.createElement('div');
-            div.className = 'vibe-option';
-            div.innerHTML = `
-                <div class="vibe-header">
-                    <span>${v.title}</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="vibe-details">${v.desc}</div>
-            `;
-            div.onclick = () => selectVibe(v.id, div);
-            vibeContainer.appendChild(div);
-        });
-
-        function selectVibe(id, element) {
-            document.querySelectorAll('.vibe-option').forEach(el => {
-                el.classList.remove('selected', 'active');
+        if (vibeContainer) {
+            vibes.forEach(v => {
+                const div = document.createElement('div');
+                div.className = 'vibe-option';
+                div.innerHTML = `<div class="vibe-header"><span>${v.title}</span><i class="fas fa-chevron-down"></i></div><div class="vibe-details">${v.desc}</div>`;
+                div.onclick = () => selectVibe(v.id, div);
+                vibeContainer.appendChild(div);
             });
+        }
+        
+        function selectVibe(id, element) {
+            document.querySelectorAll('.vibe-option').forEach(el => el.classList.remove('selected', 'active'));
             element.classList.add('selected', 'active');
             document.getElementById('selectedVibe').value = vibes.find(v => v.id === id).title;
         }
 
-        /* --- 4. THEME ENGINE & PARALLAX --- */
-        const themeSwitch = document.getElementById('themeSwitch');
-        const body = document.body;
-        const heroTitle = document.getElementById('heroTitle');
-
-        // Efecto Parallax en Scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            heroTitle.style.transform = `translateY(${scrolled * 0.4}px)`;
-        });
-
-        themeSwitch.addEventListener('click', () => {
-            body.classList.toggle('party-mode');
-            const isParty = body.classList.contains('party-mode');
-            
-            document.getElementById('modeLabel').textContent = isParty ? 'MODO FIESTA' : 'MODO CLÁSICO';
-            heroTitle.textContent = isParty ? 'NEON NIGHTS & RETROSYNTH' : 'Silent Luxury & Elegance';
-            updateChartTheme(isParty);
-        });
-
-        /* --- 5. FORM NAVIGATION --- */
-        function nextStep(step) {
-            // Validaciones básicas
-            if(step === 2) {
-                if(!document.getElementById('name').value || !document.getElementById('phone').value) 
-                    return alert("Por favor completa nombre y teléfono.");
-            }
-            if(step === 3 && document.getElementById('selectedVibe').value === "") {
-                 return alert("Por favor selecciona un estilo de decoración.");
-            }
-            showStep(step);
-        }
-
-        function prevStep(step) { showStep(step); }
-
+        // --- 5. FORM NAVIGATION (Con validación) ---
         function showStep(stepNumber) {
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
             document.getElementById(`step${stepNumber}`).classList.add('active');
-            
             document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
             document.getElementById(`dot${stepNumber}`).classList.add('active');
         }
 
-        /* --- 6. DATA CHART & LOGIC --- */
-        const ctx = document.getElementById('sentimentChart').getContext('2d');
-        
-        let sentimentChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: ['Emoción', 'Expectativas', 'Riesgo Estrés', 'Logística', 'Formalidad'],
-                datasets: [
-                    {
-                        label: 'Tu Evento',
-                        data: [90, 90, 80, 85, 50],
-                        backgroundColor: 'rgba(197, 160, 89, 0.4)',
-                        borderColor: '#c5a059',
-                        pointBackgroundColor: '#c5a059'
-                    },
-                    {
-                        label: 'Promedio Industria',
-                        data: [50, 50, 50, 50, 50],
-                        backgroundColor: 'rgba(128,128,128, 0.1)',
-                        borderColor: '#aaa',
-                        borderDash: [5, 5]
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: 'rgba(128,128,128,0.2)' },
-                        grid: { color: 'rgba(128,128,128,0.2)' },
-                        pointLabels: { font: { size: 14, family: 'Montserrat' } },
-                        suggestedMin: 0,
-                        suggestedMax: 100
-                    }
+        function nextStep(step) {
+            if(step === 2) {
+                if(!document.getElementById('name').value || !document.getElementById('phone').value) 
+                    return alert("Por favor completa tu nombre y celular/WhatsApp.");
+            }
+            if(step === 3) {
+                 if (document.getElementById('selectedVibe').value === "") {
+                    return alert("Por favor selecciona un estilo de decoración.");
                 }
             }
-        });
-
-        function updateChartHighlight() {
-            const type = document.getElementById('eventType').value;
-            let data = [];
-            
-            if(type === 'corporativo') data = [20, 70, 30, 60, 95];
-            else if (type === 'social') data = [70, 50, 20, 50, 10];
-            else if (type === 'familia') data = [85, 60, 40, 50, 30]; 
-            else data = [95, 95, 90, 90, 60]; // Default Bodas/15
-
-            sentimentChart.data.datasets[0].data = data;
-            sentimentChart.update();
+            showStep(step);
         }
+        function prevStep(step) { showStep(step); }
 
-        function updateChartTheme(isParty) {
-            const color = isParty ? '#00f3ff' : '#c5a059';
-            const bg = isParty ? 'rgba(0, 243, 255, 0.3)' : 'rgba(197, 160, 89, 0.4)';
-            
-            sentimentChart.data.datasets[0].borderColor = color;
-            sentimentChart.data.datasets[0].backgroundColor = bg;
-            sentimentChart.data.datasets[0].pointBackgroundColor = color;
-            sentimentChart.options.scales.r.pointLabels.color = isParty ? '#e0e0e0' : '#2c3e50';
-            sentimentChart.update();
-        }
-
-        /* --- 7. WHATSAPP OUTPUT --- */
+        // --- 6. WHATSAPP ---
         function sendWhatsApp() {
             const name = document.getElementById('name').value;
             const phoneInput = document.getElementById('phone').value;
@@ -845,36 +506,64 @@
             const vibe = document.getElementById('selectedVibe').value;
             const date = document.getElementById('date').value;
             const guests = document.getElementById('guests').value;
-
-            // Contexto Estadístico para mensaje (Según tu preferencia de análisis)
+            
             let statsNote = "";
-            if (eventType === 'boda' || eventType === '15') statsNote = "🔥 Prioridad Alta: Cliente con alta carga emocional.";
-            if (eventType === 'familia') statsNote = "🏠 Evento Familiar: Foco en calidez y presupuesto.";
-            if (eventType === 'corporativo') statsNote = "💼 Corporativo: Foco en eficiencia y facturación.";
+            if (eventType === 'boda') statsNote = "Matrimonio, Alto Detalle y Emoción.";
+            else if (eventType === '15') statsNote = "Cumpleaños de 15, Gran Producción.";
+            else if (eventType === 'corporativo') statsNote = "Evento Empresarial, Foco en Protocolo.";
+            else statsNote = "Evento General, Foco en Logística.";
 
-            const message = `
-🌟 *NUEVA CONSULTA GLIM* 🌟
+            const message = `🌟 *NUEVA CONSULTA GLIM* 🌟\n\n👤 *Cliente:* ${name}\n📞 *Tel:* ${phoneInput}\n📧 *Email:* ${email || 'No especificado'}\n${company ? '🏢 *Empresa:* ' + company + '\n' : ''}📅 *Fecha Deseada:* ${date || 'No especificada'}\n👥 *Invitados:* ${guests || 'No especificado'}\n\n🎨 *Estilo Elegido:* ${vibe || 'No seleccionado'}\n🎪 *Tipo:* ${eventType.toUpperCase()}\n\n💡 *Análisis:* ${statsNote}`;
 
-👤 *Cliente:* ${name}
-📞 *Tel:* ${phoneInput}
-📧 *Email:* ${email || 'No especificado'}
-${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
-📅 *Fecha:* ${date}
-👥 *Invitados:* ${guests}
-
-🎨 *Estilo Elegido:* ${vibe}
-🎪 *Tipo:* ${eventType.toUpperCase()}
-
-📊 *Análisis:* ${statsNote}
-            `.trim();
-
-            const url = `https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(message)}`;
+            const url = `https://api.whatsapp.com/send?phone=+543489670705&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
+        }
+
+        // --- 7. CHART (Gráfico Radar) ---
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        let sentimentChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Emoción', 'Expectativas', 'Estrés', 'Logística', 'Formalidad'],
+                datasets: [{ label: 'Ponderación', data: [90, 90, 80, 85, 50], backgroundColor: 'rgba(197, 160, 89, 0.4)', borderColor: '#c5a059', borderWidth: 2 }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { r: { suggestedMin: 0, suggestedMax: 100, pointLabels: { font: { size: 14, family: 'Montserrat' }, color: 'var(--text-color)' }, grid: { color: 'rgba(128,128,128,0.2)' }, angleLines: { color: 'rgba(128,128,128,0.2)' } } },
+                plugins: { legend: { display: false } } 
+            }
+        });
+        
+        // Ponderación de datos según el tipo de evento (para el gráfico)
+        function updateChartHighlight() {
+            const type = document.getElementById('eventType').value;
+            let data = [];
+            if(type === 'corporativo') data = [20, 70, 30, 95, 85]; 
+            else if (type === 'social') data = [70, 50, 20, 50, 10]; 
+            else if (type === 'familia') data = [85, 60, 40, 50, 30]; 
+            else data = [95, 95, 90, 90, 60]; 
+            sentimentChart.data.datasets[0].data = data;
+            sentimentChart.update();
+        }
+
+        function updateChartTheme(isParty) {
+            const color = isParty ? '#00f3ff' : '#c5a059';
+            const bg = isParty ? 'rgba(0, 243, 255, 0.3)' : 'rgba(197, 160, 89, 0.4)';
+            sentimentChart.data.datasets[0].borderColor = color;
+            sentimentChart.data.datasets[0].backgroundColor = bg;
+            const gridColor = isParty ? 'rgba(255, 255, 255, 0.2)' : 'rgba(128,128,128,0.2)';
+            sentimentChart.options.scales.r.pointLabels.color = isParty ? 'var(--text-color)' : '#2c3e50';
+            sentimentChart.options.scales.r.grid.color = gridColor;
+            sentimentChart.options.scales.r.angleLines.color = gridColor;
+            
+            sentimentChart.update();
         }
     </script>
 </body>
 </html>
 "Commit"
+
 
 
 
