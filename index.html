@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght=500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- CORE VARIABLES (THEME ENGINE) --- */
@@ -564,7 +564,14 @@
                         <p>Iluminación puntual</p>
                     </div>
                 </div>
-                <div class="swiper-slide" style="background-image:glimfoto5.jpeg">
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">9.6/10</div>
+                        <h4>Vestidos de 15</h4>
+                        <p>Cómo elegir el estilo perfecto.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1478146896981-b80c463e7e22?q=80&w=800')">
                     <div class="slide-content">
                         <div class="rating-badge">10/10</div>
                         <h4>Vibra Neón</h4>
@@ -576,6 +583,13 @@
                         <div class="rating-badge">9.9/10</div>
                         <h4>Exteriores</h4>
                         <p>Naturaleza integrada</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">9.9/10</div>
+                        <h4>Enamorados</h4>
+                        <p>El día de la unión</p>
                     </div>
                 </div>
                 <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800')">
@@ -832,7 +846,7 @@
             const date = document.getElementById('date').value;
             const guests = document.getElementById('guests').value;
 
-            // Contexto Estadístico para mensaje
+            // Contexto Estadístico para mensaje (Según tu preferencia de análisis)
             let statsNote = "";
             if (eventType === 'boda' || eventType === '15') statsNote = "🔥 Prioridad Alta: Cliente con alta carga emocional.";
             if (eventType === 'familia') statsNote = "🏠 Evento Familiar: Foco en calidez y presupuesto.";
@@ -854,13 +868,14 @@ ${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
 📊 *Análisis:* ${statsNote}
             `.trim();
 
-            const url = `https://api.whatsapp.com/send?phone=+543489670705&text=${encodeURIComponent(message)}`;
+            const url = `https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
     </script>
 </body>
 </html>
 "Commit"
+
 
 
 
