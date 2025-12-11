@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css?v=2025" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js?v=2025"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght=500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- VARIABLES DEL TEMA --- */
@@ -72,15 +72,7 @@
         .mySwiper { width: 100%; height: 350px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
         .swiper-slide-hero { display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; height: 100%; }
         
-        /* Estilos para el video dentro del Swiper 1 */
-        .swiper-slide-hero video { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            z-index: 1; /* Detrás del overlay y el texto */
-        }
-        .swiper-slide-hero img { 
+        .swiper-slide-hero video, .swiper-slide-hero img { 
             position: absolute; 
             width: 100%; 
             height: 100%; 
@@ -127,6 +119,9 @@
         }
         .calendar-btn:hover { background: var(--accent-color); color: white;}
 
+        /* --- SECCIONES INFERIORES --- */
+        .galeria, .data-section { padding: 80px 20px; text-align: center; }
+        
         /* --- SWIPER 2: GALERÍA 3D (Mantenida) --- */
         .galeria { width: 100%; padding: 80px 0; overflow: hidden; background: rgba(0,0,0,0.02); text-align: center; }
         .galeria .swiper { width: 100%; padding: 50px 0; }
@@ -137,11 +132,7 @@
         .slide-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; text-align: left; }
         .rating-badge { background: var(--accent-color); color: white; padding: 5px 10px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-bottom: 10px; }
 
-        /* --- DATA SECTION (Mantenida) --- */
-        .data-section { padding: 80px 20px; background: var(--bg-color); }
-        .chart-container { height: 450px; max-width: 900px; margin: 0 auto; }
-        .intro-data h2 { color: var(--accent-color); font-size: 2.2rem; margin-bottom: 40px; }
-        
+        /* --- TARJETAS KPI (Diseño mantenido) --- */
         .kpi-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -156,7 +147,7 @@
             background: var(--card-bg); 
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             border-left: 5px solid var(--accent-color);
-            text-align: left;
+            text-align: left; 
             position: relative;
             overflow: hidden;
         }
@@ -195,6 +186,35 @@
         }
         body.party-mode .kpi-card h4, body.party-mode .kpi-card h4::before {
             color: var(--accent-color);
+        }
+
+        /* --- FOOTER & REDES SOCIALES (Centrado Optimizado) --- */
+        footer {
+            padding: 40px 20px;
+            background-color: var(--text-color); 
+            color: white;
+            text-align: center;
+            border-top: 5px solid var(--accent-color);
+        }
+        .social-icons {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center; /* Centrado horizontal */
+            gap: 30px; 
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.8rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .social-icons a:hover {
+            color: var(--accent-color);
+            transform: scale(1.1); 
+        }
+        footer p {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -242,7 +262,7 @@
                     </div>
                     <div class="swiper-slide swiper-slide-hero" id="luxurySlide">
                         <video id="glimVideo" src="video glim.mp4" loop muted playsinline preload="auto"></video>
-                        <span></span>
+                        <span>Glamour Luxury</span>
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
@@ -271,8 +291,8 @@
                             <option value="boda">💍 Boda / Compromiso</option>
                             <option value="15">👑 Cumpleaños de 15</option>
                             <option value="corporativo">💼 Evento Empresarial</option>
-                            <option value="familia">🏡 Evento Familiar</option>
                             <option value="social">🎉 Evento Social / Fiesta</option>
+                            <option value="familia">🏡 Evento Familiar</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -372,6 +392,19 @@
         </div>
     </section>
 
+    <footer>
+        <h3>Conéctate con GLIM</h3>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/glimeventos/" target="_blank" aria-label="Instagram de GLIM Eventos">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com/glimeventos/photos/vení-a-visitar-nuestro-salón-de-fiestasglim-eventosproducción-integral-de-evento/714459140690884/?_rdr" target="_blank" aria-label="Facebook de GLIM Eventos">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </div>
+        <p>&copy; 2025 GLIM Eventos. Todos los derechos reservados.</p>
+    </footer>
+
     <script>
         const glimVideo = document.getElementById('glimVideo');
 
@@ -382,12 +415,11 @@
             autoplay: { delay: 3500 }, 
             pagination: { el: ".swiper-pagination", clickable: true }, 
             loop: true,
-            // AÑADIDO: Manejo de reproducción/pausa del video al cambiar de slide
+            // Manejo de reproducción/pausa del video al cambiar de slide
             on: {
                 slideChangeTransitionStart: function () {
                     if (glimVideo) {
-                        // Pausar el video si el slide no es el del video
-                        const luxurySlideIndex = 3; // Índice de la tarjeta "Glamour Luxury" (0-indexed)
+                        const luxurySlideIndex = 3; 
                         if (this.activeIndex % this.slides.length !== luxurySlideIndex) {
                             glimVideo.pause();
                         }
@@ -396,16 +428,13 @@
                 slideChangeTransitionEnd: function () {
                     if (glimVideo) {
                         const luxurySlideIndex = 3; 
-                        // Reproducir el video si el slide actual es el del video
-                        if (this.activeIndex % this.slides.length === luxurySlideIndex) {
-                            glimVideo.play().catch(e => console.error("Error al reproducir el video:", e));
-                        }
+                        glimVideo.play().catch(e => console.error("Error al reproducir el video:", e));
                     }
                 }
             }
         });
         
-        // SWIPER 2 (3D REAL - COVERFLOW)
+        // SWIPER 2 (3D REAL - COVERFLOW) - MANTENIDO
         var swiper2 = new Swiper(".mySwiper2", {
             effect: "coverflow", grabCursor: true, centeredSlides: true, slidesPerView: "auto",
             coverflowEffect: { rotate: 50, stretch: 0, depth: 100, modifier: 1, slideShadows: true, },
@@ -508,6 +537,7 @@
             const guests = document.getElementById('guests').value;
             
             let statsNote = "";
+            // Nota: El usuario valora el contexto estadístico (del 2025-06-05)
             if (eventType === 'boda') statsNote = "Matrimonio, Alto Detalle y Emoción.";
             else if (eventType === '15') statsNote = "Cumpleaños de 15, Gran Producción.";
             else if (eventType === 'corporativo') statsNote = "Evento Empresarial, Foco en Protocolo.";
@@ -515,7 +545,7 @@
 
             const message = `🌟 *NUEVA CONSULTA GLIM* 🌟\n\n👤 *Cliente:* ${name}\n📞 *Tel:* ${phoneInput}\n📧 *Email:* ${email || 'No especificado'}\n${company ? '🏢 *Empresa:* ' + company + '\n' : ''}📅 *Fecha Deseada:* ${date || 'No especificada'}\n👥 *Invitados:* ${guests || 'No especificado'}\n\n🎨 *Estilo Elegido:* ${vibe || 'No seleccionado'}\n🎪 *Tipo:* ${eventType.toUpperCase()}\n\n💡 *Análisis:* ${statsNote}`;
 
-            const url = `https://api.whatsapp.com/send?phone=+543489670705&text=${encodeURIComponent(message)}`;
+            const url = `https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
 
@@ -563,6 +593,7 @@
 </body>
 </html>
 "Commit"
+
 
 
 
