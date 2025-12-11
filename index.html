@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- CORE VARIABLES (THEME ENGINE) --- */
@@ -64,7 +65,7 @@
 
         h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 15px 0; }
 
-        /* --- AUDIO PLAYER (DISEÑO PERSONALIZADO) --- */
+        /* --- AUDIO PLAYER --- */
         .music-control {
             position: fixed;
             bottom: 25px;
@@ -94,7 +95,6 @@
             background: var(--accent-hover);
         }
 
-        /* Barras de Audio Animadas */
         .music-bars {
             display: flex;
             justify-content: center;
@@ -114,15 +114,14 @@
         .bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
         .bar:nth-child(3) { height: 12px; animation-delay: 0.5s; }
 
-        /* Estado Pausado (Animación detenida) */
         .music-control.paused {
-            background: rgba(44, 62, 80, 0.7); /* Color neutro cuando está apagado */
+            background: rgba(44, 62, 80, 0.7);
             opacity: 0.8;
         }
         
         .music-control.paused .bar {
             animation: none;
-            height: 4px; /* Barras colapsadas */
+            height: 4px;
             background-color: #ccc;
         }
 
@@ -131,7 +130,7 @@
             100% { height: 100%; }
         }
 
-        /* --- PARALLAX BACKGROUND --- */
+        /* --- BACKGROUNDS --- */
         .parallax-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 120vh;
@@ -173,14 +172,13 @@
 
         .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text-color); }
         
-        /* Switch CSS */
         .switch-container { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
         .toggle-btn { width: 50px; height: 26px; background: #ccc; border-radius: 50px; position: relative; }
         .toggle-btn::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; }
         body.party-mode .toggle-btn { background: #ff00ff; }
         body.party-mode .toggle-btn::after { transform: translateX(24px); background: #00f3ff; }
 
-        /* --- HERO & STORYTELLING --- */
+        /* --- HERO --- */
         .hero {
             min-height: 90vh;
             display: flex;
@@ -206,14 +204,14 @@
             opacity: 0.9;
         }
 
-        /* --- SWIPER CAROUSEL --- */
+        /* --- SWIPER MAIN --- */
         .swiper-section {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto 50px;
             padding: 0 20px;
         }
-        .swiper {
+        .mySwiper {
             width: 100%;
             height: 350px; 
             border-radius: var(--border-radius);
@@ -232,11 +230,11 @@
             position: relative;
         }
         .swiper-slide::before {
-            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3); /* Oscurecer imagen */
+            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3);
         }
         .swiper-slide span { position: relative; z-index: 2; text-shadow: 0 4px 10px rgba(0,0,0,0.6); }
 
-        /* --- FORMULARIO PROGRESIVO AVANZADO --- */
+        /* --- FORM --- */
         .form-wrapper {
             background: var(--card-bg);
             padding: 40px;
@@ -247,6 +245,25 @@
             position: relative;
             border-top: 4px solid var(--accent-color);
             margin-bottom: 80px;
+        }
+
+        /* Progress Dots (CSS AGREGADO) */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(128,128,128,0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: var(--accent-color);
+            transform: scale(1.3);
         }
 
         .step { display: none; animation: slideUp 0.5s ease; }
@@ -265,7 +282,6 @@
         }
         input:focus { border-color: var(--accent-color); background: var(--card-bg); }
 
-        /* Vibe Selector Cards (Smart Accordion) */
         .vibe-grid { display: grid; grid-template-columns: 1fr; gap: 15px; max-height: 400px; overflow-y: auto; padding-right: 5px;}
         .vibe-option {
             border: 1px solid rgba(128,128,128,0.2);
@@ -294,7 +310,6 @@
         }
         .vibe-option.active .vibe-details { display: block; }
 
-        /* Buttons */
         .btn-group { display: flex; gap: 15px; margin-top: 30px; }
         .btn {
             flex: 1; padding: 15px; border: none; border-radius: var(--border-radius);
@@ -304,7 +319,6 @@
         .btn-secondary { background: transparent; border: 2px solid rgba(128,128,128,0.3); color: var(--text-color); }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* Calendar Button */
         .calendar-btn {
             display: inline-block;
             margin-top: 10px;
@@ -317,6 +331,67 @@
             font-weight: 600;
         }
         .calendar-btn:hover { background: var(--accent-color); color: white;}
+
+        /* --- 2ND CAROUSEL: COVERFLOW 3D GALLERY --- */
+        .immersive-gallery {
+            width: 100%;
+            padding: 60px 0;
+            background: rgba(0,0,0,0.02);
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .immersive-gallery h2 { margin-bottom: 40px; font-size: 2rem; color: var(--text-color); }
+
+        .mySwiper2 {
+            width: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .mySwiper2 .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+            height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            filter: brightness(0.8);
+            transition: filter 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .mySwiper2 .swiper-slide-active {
+            filter: brightness(1.1);
+            box-shadow: 0 20px 60px rgba(var(--accent-color), 0.4);
+            border: 1px solid var(--accent-color);
+        }
+
+        .slide-content h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin: 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+        .slide-content p {
+            color: #ddd;
+            font-size: 0.8rem;
+            margin: 5px 0 0;
+        }
+        .rating-badge {
+            background: var(--accent-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
 
         /* --- DATA SECTION --- */
         .data-section { padding: 80px 20px; background: var(--card-bg); position: relative; z-index: 1;}
@@ -336,7 +411,6 @@
         ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
 
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@500;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -388,7 +462,7 @@
                     <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000');">
                         <span>Bodas Vintage</span>
                     </div>
-                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1561930661-db1d56cc3316?q=80&w=2000');">
+                    <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0202128?q=80&w=2000');">
                         <span>Glamour Luxury</span>
                     </div>
                 </div>
@@ -479,6 +553,50 @@
         </div>
     </section>
 
+    <section class="immersive-gallery">
+        <h2>Experiencias Recientes</h2>
+        <div class="swiper mySwiper2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">9.8/10</div>
+                        <h4>Gala de Noche</h4>
+                        <p>Iluminación puntual</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1478146896981-b80c463e7e22?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">10/10</div>
+                        <h4>Vibra Neón</h4>
+                        <p>Efectos visuales</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1520342868574-5fa3804e551c?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">9.9/10</div>
+                        <h4>Exteriores</h4>
+                        <p>Naturaleza integrada</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">9.7/10</div>
+                        <h4>Alta Costura</h4>
+                        <p>Detalles finos</p>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image:url('https://images.unsplash.com/photo-1505236858274-0959ac156d0f?q=80&w=800')">
+                    <div class="slide-content">
+                        <div class="rating-badge">10/10</div>
+                        <h4>Intimidad</h4>
+                        <p>Micro-eventos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
     <section class="data-section">
         <div class="intro-data">
             <h2>📊 Inteligencia de Eventos</h2>
@@ -506,7 +624,7 @@
     </section>
 
     <script>
-        /* --- 1. INITIALIZATION & SWIPER --- */
+        /* --- 1. INITIALIZATION & SWIPER 1 (HERO) --- */
         var swiper = new Swiper(".mySwiper", {
             spaceBetween: 30,
             centeredSlides: true,
@@ -515,7 +633,26 @@
             loop: true
         });
 
-        /* --- AUDIO LOGIC (UPDATED WITH BARS ANIMATION) --- */
+        /* --- 2. SWIPER 2 (COVERFLOW 3D EFFECT) --- */
+        var swiper2 = new Swiper(".mySwiper2", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+            },
+            initialSlide: 1
+        });
+
+        /* --- AUDIO LOGIC --- */
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         const musicText = document.getElementById('musicText');
@@ -543,7 +680,7 @@
             }
         });
 
-        /* --- 2. VIBE DATA & RENDERER --- */
+        /* --- 3. VIBE DATA & RENDERER --- */
         const vibes = [
             { id: 'clasico', title: '1. Clásico & Elegante', desc: 'Neutros (blanco, dorado), flores naturales, velas, mantelería fina. Ideal para bodas de gala.' },
             { id: 'romantico', title: '2. Romántico', desc: 'Tonos pastel (rosa, lavanda), iluminación cálida, rosas y peonías. Perfecto para bodas íntimas.' },
@@ -578,7 +715,7 @@
             document.getElementById('selectedVibe').value = vibes.find(v => v.id === id).title;
         }
 
-        /* --- 3. THEME ENGINE & PARALLAX --- */
+        /* --- 4. THEME ENGINE & PARALLAX --- */
         const themeSwitch = document.getElementById('themeSwitch');
         const body = document.body;
         const heroTitle = document.getElementById('heroTitle');
@@ -598,7 +735,7 @@
             updateChartTheme(isParty);
         });
 
-        /* --- 4. FORM NAVIGATION --- */
+        /* --- 5. FORM NAVIGATION --- */
         function nextStep(step) {
             // Validaciones básicas
             if(step === 2) {
@@ -621,7 +758,7 @@
             document.getElementById(`dot${stepNumber}`).classList.add('active');
         }
 
-        /* --- 5. DATA CHART & LOGIC --- */
+        /* --- 6. DATA CHART & LOGIC --- */
         const ctx = document.getElementById('sentimentChart').getContext('2d');
         
         let sentimentChart = new Chart(ctx, {
@@ -684,7 +821,7 @@
             sentimentChart.update();
         }
 
-        /* --- 6. WHATSAPP OUTPUT --- */
+        /* --- 7. WHATSAPP OUTPUT --- */
         function sendWhatsApp() {
             const name = document.getElementById('name').value;
             const phoneInput = document.getElementById('phone').value;
@@ -717,13 +854,14 @@ ${company ? '🏢 *Empresa:* ' + company + '\n' : ''}
 📊 *Análisis:* ${statsNote}
             `.trim();
 
-            const url = `https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(message)}`;
+            const url = `https://api.whatsapp.com/send?phone=+543489670705&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
     </script>
 </body>
 </html>
 "Commit"
+
 
 
 
